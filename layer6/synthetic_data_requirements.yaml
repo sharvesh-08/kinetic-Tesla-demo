@@ -1,0 +1,28 @@
+# Production data contract for Layer 6.  Values are minimum planning targets, not a claim
+# that a synthetic source equals flight validation data.
+schema_version: 1
+feature_source: layer5_feature_window_only
+classifier:
+  model: lightgbm_binary_one_vs_rest
+  classes: [misfire, injector_abnormality, cooling_degradation, lubrication_issue, sensor_drift_failure, combustion_instability, overheating_trend, abnormal_vibration]
+  minimum_complete_feature_history_seconds: 60
+  independent_calibration_and_test_sorties: required
+  per_class_probability_calibration: sigmoid
+  per_class_decision_threshold: held_out_sorties
+  minimum_independent_sorties_per_class_per_regime: 100
+  severity_bands: {early: [0.05, 0.25], moderate: [0.25, 0.60], severe: [0.60, 1.00]}
+  required_labels: [sortie_id, engine_serial, window_start_ns, window_end_ns, fault_class, fault_labels, fault_active, fault_onset_ns, fault_severity, subsystem, operating_regime, ambient_temperature_c, altitude_m, power_band, maintenance_outcome]
+isolation_forest:
+  training_population: verified_healthy_windows_only
+  minimum_independent_healthy_sorties_per_regime: 100
+  required_assertion: "fault_active == false and maintenance_outcome == healthy"
+rul_and_maintenance:
+  # Captured here for the downstream history-based RUL/maintenance layer; not a third Layer 6 model.
+  required_labels: [engine_serial, flight_hours_total, cycles_total, hours_since_overhaul, maintenance_action, maintenance_timestamp_ns, failure_or_removal_timestamp_ns]
+coverage:
+  operating_regimes: [cold_start, idle, taxi, climb, cruise, descent, high_power_transient, hot_day, cold_day, high_altitude]
+  data_quality_states: [fully_valid, sensor_drift, dropout, timing_degraded]
+  simultaneous_fault_scenarios: required_for_multilabel_evaluation
+xai:
+  feature_metadata: [feature_name, subsystem, units, plain_language]
+  output: [fault_flags, per_class_calibrated_probability, anomaly_score, per_class_subsystem_shap, per_class_top_feature_shap]

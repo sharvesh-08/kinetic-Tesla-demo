@@ -1,0 +1,59 @@
+# PROVISIONAL FILTER TUNING — replace after calibration against healthy engine logs.
+# Physical engine constants do not belong in this file.
+schema_version: 1
+master_rate_hz: 100
+missing_measurement_p_inflation: 1.05
+transient:
+  rpm_rate_threshold_per_s: 800.0
+  throttle_rate_threshold_pct_per_s: 40.0
+  q_inflation_factor: 10.0
+sensor_health:
+  innovation_gate_sigma: 3.0
+  drifting_bias_sigma: 3.0
+  failed_bias_sigma: 8.0
+  failed_residual_sigma: 10.0
+  minimum_bias_age_samples: 20
+  substitution_enabled: true
+subfilters:
+  combustion:
+    channels: [egt_degC]
+    q: {egt_degC: 0.25}
+    r: {egt_degC: 9.0}
+    initial_p: {egt_degC: 25.0}
+    bias_q: {egt_degC: 0.0004}
+    bias_r: {egt_degC: 100.0}
+  thermal:
+    channels: [cht_degC]
+    q: {cht_degC: 0.16}
+    r: {cht_degC: 4.0}
+    initial_p: {cht_degC: 16.0}
+    bias_q: {cht_degC: 0.0004}
+    bias_r: {cht_degC: 64.0}
+  air_path:
+    channels: [map_kPa, fuel_flow_Lph]
+    q: {map_kPa: 0.04, fuel_flow_Lph: 0.04}
+    r: {map_kPa: 0.25, fuel_flow_Lph: 0.25}
+    initial_p: {map_kPa: 1.0, fuel_flow_Lph: 1.0}
+    bias_q: {map_kPa: 0.0001, fuel_flow_Lph: 0.0001}
+    bias_r: {map_kPa: 4.0, fuel_flow_Lph: 4.0}
+  lubrication:
+    channels: [oil_press_kPa, oil_temp_degC]
+    q: {oil_press_kPa: 1.0, oil_temp_degC: 0.04}
+    r: {oil_press_kPa: 9.0, oil_temp_degC: 1.0}
+    initial_p: {oil_press_kPa: 25.0, oil_temp_degC: 4.0}
+    bias_q: {oil_press_kPa: 0.001, oil_temp_degC: 0.0001}
+    bias_r: {oil_press_kPa: 100.0, oil_temp_degC: 25.0}
+  vibration:
+    channels: [vibration_rms_g]
+    q: {vibration_rms_g: 0.0004}
+    r: {vibration_rms_g: 0.0025}
+    initial_p: {vibration_rms_g: 0.01}
+    bias_q: {vibration_rms_g: 0.000001}
+    bias_r: {vibration_rms_g: 0.04}
+  electrical:
+    channels: [batt_volts, alt_amps]
+    q: {batt_volts: 0.001, alt_amps: 0.04}
+    r: {batt_volts: 0.01, alt_amps: 1.0}
+    initial_p: {batt_volts: 0.04, alt_amps: 4.0}
+    bias_q: {batt_volts: 0.000001, alt_amps: 0.0001}
+    bias_r: {batt_volts: 0.25, alt_amps: 16.0}

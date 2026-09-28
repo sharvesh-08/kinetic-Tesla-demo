@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="theme-color" content="#ffffff"/>
+  <title>MALE UAV · Engine Operations</title>
+  <script type="module" src="/src/main.jsx"></script>
+  <style>
+    /* Window Controls in Title Bar */
+    .win-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-left: auto;
+    }
+    .win-act-btn {
+      width: 24px;
+      height: 24px;
+      padding: 0;
+      margin: 0;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: #334155;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      transition: all 0.15s ease;
+    }
+    .win-act-btn:hover {
+      background: #f1f5f9;
+      color: #000000;
+      border-color: #94a3b8;
+    }
+    .panel.is-collapsed > *:not(.panel-title) {
+      display: none !important;
+    }
+    .panel.is-collapsed .panel-title {
+      margin-bottom: 0 !important;
+      border-bottom: none !important;
+      border-radius: 11px !important;
+    }
+  </style>
+</head>
+<body data-active-tab="01">
+  <div id="root"></div>
+
+  <script>
+    // 1. Tag panels with their respective layer tabs and attach window controls
+    function setupWindowsAndTabs() {
+      var header = document.querySelector('header');
+      if (header && !document.getElementById('opsNavTabs')) {
+        var navBar = document.createElement('nav');
+        navBar.id = 'opsNavTabs';
+        navBar.className = 'nav-tabs-bar';
+
+        var tabs = [
+          { id: '01', label: '01 OVERVIEW / DIGITAL TWIN' },
+          { id: '02', label: '02 DIAGNOSTICS & PREDICTION' },
+          { id: '03', label: '03 RISK & RUL' },
+          { id: '04', label: '04 TRENDS & TELEMETRY' },
+          { id: '05', label: '05 MISSION & REPLAY' }
+        ];
+
+        tabs.forEach(function(t) {
+          var btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'nav-tab-btn' + (t.id === '01' ? ' active' : '');
+          btn.setAttribute('data-target', t.id);
+          btn.textContent = t.label;
+          btn.onclick = function() {
+            document.querySelectorAll('.nav-tab-btn').forEach(function(b) { b.classList.remove('active'); });
+            btn.classList.add('active');
+            document.body.setAttribute('data-active-tab', t.id);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          };
+          if (!navBar.querySelector('.nav-tabs-buttons')) {
+            var inner = document.createElement('div');
+            inner.className = 'nav-tabs-inner';
+            var leftSpacer = document.createElement('div');
+            var btns = document.createElement('div');
+            btns.className = 'nav-tabs-buttons';
+            inner.appendChild(leftSpacer);
+            inner.appendChild(btns);
+            navBar.appendChild(inner);
+          }
+          navBar.querySelector('.nav-tabs-buttons').appendChild(btn);
+        });
+
+        header.parentNode.insertBefore(navBar, header.nextSibling);
+      }
+
+      // Tag main elements for tab-based visibility
+      var main = document.querySelector('main');
+      if (main) {
+        var children = Array.from(main.children);
+        children.forEach(function(child) {
+          if (child.hasAttribute('data-tab')) return;
+          if (child.classList.contains('page-heading') || child.classList.contains('pipeline-strip')) {
+            child.setAttribute('data-tab', '01 02 all');
+          } else if (child.classList.contains('engine')) {
+            child.setAttribute('data-tab', '01 05 all');
+          } else if (child.classList.contains('two-col')) {
+            child.setAttribute('data-tab', '02 all');
+          } else if (child.classList.contains('panel')) {
+            var text = child.textContent || '';
+            if (text.indexOf('LAYER 07') !== -1 || text.indexOf('Engine Health & RUL Prognostics') !== -1 || text.indexOf('Engine risk') !== -1 || text.indexOf('Ex AI') !== -1) {
+              child.setAttribute('data-tab', '03 all'); // Dedicated Tab 03 for Layer 07!
+            } else if (text.indexOf('Live telemetry history') !== -1 || text.indexOf('04 ·') !== -1 || text.indexOf('TRENDS') !== -1 || text.indexOf('Oscilloscope') !== -1) {
+              child.setAttribute('data-tab', '04 05 all');
+            } else if (text.indexOf('LAYER 02') !== -1 || text.indexOf('Synchronized sensor') !== -1 || text.indexOf('Synchronized Sensor Data') !== -1) {
+              child.setAttribute('data-tab', '01');
+            } else if (text.indexOf('LAYERS 03') !== -1 || text.indexOf('Physics predictions') !== -1) {
+              child.setAttribute('data-tab', '02 all');
+            }
+          }
+        });
+      }
+
+      // Attach window titlebar controls
+      document.querySelectorAll('.panel, aside').forEach(function(panel) {
+        var titleEl = panel.querySelector('.panel-title') || panel.querySelector('h2');
+        if (!titleEl || panel.querySelector('.win-toolbar')) return;
+
+        var toolbar = document.createElement('div');
+        toolbar.className = 'win-toolbar';
+
+        // Collapse button
+        var colBtn = document.createElement('button');
+        colBtn.type = 'button';
+        colBtn.className = 'win-act-btn';
+        colBtn.title = 'Collapse/Expand Window';
+        colBtn.textContent = '−';
+        colBtn.onclick = function(e) {
+          e.stopPropagation();
+          panel.classList.toggle('is-collapsed');
+          colBtn.textContent = panel.classList.contains('is-collapsed') ? '+' : '−';
+        };
+
+        // Maximize button
+        var maxBtn = document.createElement('button');
+        maxBtn.type = 'button';
+        maxBtn.className = 'win-act-btn';
+        maxBtn.title = 'Maximize/Restore Window';
+        maxBtn.textContent = '⛶';
+        maxBtn.onclick = function(e) {
+          e.stopPropagation();
+          panel.classList.toggle('is-maximized');
+          maxBtn.textContent = panel.classList.contains('is-maximized') ? '⊡' : '⛶';
+        };
+
+        toolbar.appendChild(colBtn);
+        toolbar.appendChild(maxBtn);
+
+        if (titleEl.classList.contains('panel-title')) {
+          titleEl.appendChild(toolbar);
+        }
+      });
+    }
+
+    window.addEventListener('DOMContentLoaded', setupWindowsAndTabs);
+    window.addEventListener('load', function() {
+      setupWindowsAndTabs();
+      setTimeout(setupWindowsAndTabs, 500);
+      setTimeout(setupWindowsAndTabs, 1500);
+    });
+    setTimeout(setupWindowsAndTabs, 500);
+  </script>
+</body>
+</html>

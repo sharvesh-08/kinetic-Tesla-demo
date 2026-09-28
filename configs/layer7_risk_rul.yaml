@@ -1,0 +1,117 @@
+# PROVISIONAL — requires domain expert sign-off before operational use
+schema_version: 2
+provisional_notice: "PROVISIONAL — requires domain expert sign-off before operational use"
+
+# PROVISIONAL — requires domain expert sign-off before operational use
+failure_thresholds:
+  oil_press_residual_kPa: 50.0
+  oil_temp_residual_degC: 20.0
+  eta_pump_critical: 0.60
+  bearing_clearance_critical_mm: 0.25
+  battery_R_int_critical_ohm: 0.15
+  eta_vol_critical: 0.70
+  R_th_critical_factor: 2.5
+  vib_A1x_residual_g: 0.50
+  vib_A2x_residual_g: 0.50
+  cht_residual_degC: 30.0
+  egt_residual_degC: 60.0
+  map_residual_kPa: 10.0
+
+# PROVISIONAL — requires domain expert sign-off before operational use
+subsystem_consequence_weight:
+  lubrication: 10
+  mechanical: 9
+  thermal: 8
+  combustion: 7
+  air_path: 5
+  electrical: 4
+  sensor: 2
+
+# PROVISIONAL — requires domain expert sign-off before operational use
+risk_fusion:
+  residual_weight: 0.30
+  shap_weight: 0.15
+  classifier_weight: 0.25
+  anomaly_weight: 0.20
+  trend_weight: 0.10
+  noisy_or_scale: 1.0
+  risk_confirmation_windows: 3
+  catastrophic_indicator_fraction: 1.0
+  minimum_data_quality: 0.05
+  nis_inconsistency_threshold: 3.0
+  uncertainty_quality_multiplier: 3.0
+
+# PROVISIONAL — requires domain expert sign-off before operational use
+rul:
+  confidence_level: 0.90
+  monte_carlo_samples: 2000
+  random_seed: 42
+  minimum_trend_points: 6
+  minimum_horizon_hours: 0.25
+  measurement_noise_fraction: 0.02
+  threshold_uncertainty_fraction: 0.05
+  assumed_profile: condition_hours
+  stress_coefficients:
+    altitude_factor_per_1000m: 0.02
+    ambient_temp_factor_per_10C: 0.015
+    thermal_cycle_factor: 0.05
+  reference_altitude_m: 0.0
+  reference_ambient_temp_degC: 15.0
+  slope_stable_z: 1.0
+
+# PROVISIONAL — requires domain expert sign-off before operational use
+risk_action_thresholds:
+  ADVISORY: 30
+  MAINTENANCE_FLAG: 55
+  POWER_DERATE: 70
+  ABORT_RECOMMEND: 82
+  IMMEDIATE: 92
+engine_state_thresholds:
+  # High-confidence Layer 6 fault predictions must affect the health state,
+  # including when the active simulation artifact is marked unverified.
+  provisional_fault_probability: 0.60
+  abnormal_fault_probability: 0.60
+  abnormal_anomaly_score: 0.70
+  critical_fault_probability: 0.80
+  critical_anomaly_score: 0.85
+  immediate_action_forces_critical: true
+redline_limits:
+  oil_press_min_kPa: 138
+  cht_max_degC: 230
+  egt_max_degC: 950
+  batt_volts_min_V: 11.0
+  vib_rms_max_g: 2.0
+  rpm_max: 6200
+
+# PROVISIONAL — requires domain expert sign-off before operational use
+authority:
+  advisory_only: true
+
+# PROVISIONAL — requires domain expert sign-off before operational use
+maintenance:
+  rul_safety_margin_fraction: 0.20
+  identification_cadence: post_sortie
+  catalogue_fallback: "Inspect <subsystem> before next sortie."
+  catalogue:
+    lubrication: {task_id: LUB-INSPECT, task_text: "Inspect oil system before next sortie."}
+    mechanical: {task_id: MECH-INSPECT, task_text: "Inspect mechanical system before next sortie."}
+    thermal: {task_id: THERM-INSPECT, task_text: "Inspect cooling system before next sortie."}
+    combustion: {task_id: COMB-INSPECT, task_text: "Inspect combustion system before next sortie."}
+    air_path: {task_id: AIR-INSPECT, task_text: "Inspect air-path system before next sortie."}
+    electrical: {task_id: ELEC-INSPECT, task_text: "Inspect electrical system before next sortie."}
+    sensor: {task_id: SENS-INSPECT, task_text: "Inspect sensor system before next sortie."}
+
+# PROVISIONAL — requires domain expert sign-off before operational use
+indicators:
+  oil_press_residual_kPa: {subsystem: lubrication, threshold_key: oil_press_residual_kPa, failure_direction: 1}
+  oil_temp_residual_degC: {subsystem: lubrication, threshold_key: oil_temp_residual_degC, failure_direction: 1}
+  eta_pump: {subsystem: lubrication, threshold_key: eta_pump_critical, failure_direction: -1, healthy_reference: 1.0}
+  bearing_clearance_mm: {subsystem: mechanical, threshold_key: bearing_clearance_critical_mm, failure_direction: 1}
+  battery_R_int_ohm: {subsystem: electrical, threshold_key: battery_R_int_critical_ohm, failure_direction: 1}
+  eta_vol: {subsystem: air_path, threshold_key: eta_vol_critical, failure_direction: -1, healthy_reference: 1.0}
+  R_th_factor: {subsystem: thermal, threshold_key: R_th_critical_factor, failure_direction: 1}
+  vib_A1x_residual_g: {subsystem: mechanical, threshold_key: vib_A1x_residual_g, failure_direction: 1}
+  vib_A2x_residual_g: {subsystem: mechanical, threshold_key: vib_A2x_residual_g, failure_direction: 1}
+  cht_residual_degC: {subsystem: thermal, threshold_key: cht_residual_degC, failure_direction: 1}
+  egt_residual_degC: {subsystem: combustion, threshold_key: egt_residual_degC, failure_direction: 1}
+  map_residual_kPa: {subsystem: air_path, threshold_key: map_residual_kPa, failure_direction: 1}

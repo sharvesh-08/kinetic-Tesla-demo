@@ -1,0 +1,136 @@
+schema_version: 4
+feature_schema_version: layer5-engine-telemetry-v4
+sample_rate_hz: 100
+window_seconds: 5
+hop_fraction: 0.5
+downsample_stride: 10
+long_window_seconds: 60
+long_channels:
+- oil_press_kPa
+- oil_temp_degC
+- cht_degC
+- egt_degC
+- batt_volts
+- alt_amps
+long_summaries:
+- mean
+- slope
+- nis_mean
+- bias_mean
+- availability
+regime_features:
+- rpm_mean_5s
+- throttle_mean_5s
+- rpm_slope_5s
+- altitude_mean_5s
+channels:
+  egt_degC:
+    subsystem: combustion
+    units: degC
+  cht_degC:
+    subsystem: thermal
+    units: degC
+  map_kPa:
+    subsystem: air_path
+    units: kPa
+  fuel_flow_Lph:
+    subsystem: air_path
+    units: L/h
+  oil_press_kPa:
+    subsystem: lubrication
+    units: kPa
+  oil_temp_degC:
+    subsystem: lubrication
+    units: degC
+  vibration_rms_g:
+    subsystem: vibration
+    units: g
+  batt_volts:
+    subsystem: electrical
+    units: V
+  alt_amps:
+    subsystem: electrical
+    units: A
+summaries:
+  mean:
+    units: channel
+    plain_language: mean imputed residual
+  max_abs:
+    units: channel
+    plain_language: maximum absolute imputed residual
+  slope:
+    units: channel_per_s
+    plain_language: least-squares residual slope
+  nis_mean:
+    units: sigma_squared
+    plain_language: mean normalized innovation squared
+  nis_max:
+    units: sigma_squared
+    plain_language: maximum normalized innovation squared
+  bias_mean:
+    units: channel
+    plain_language: mean estimated Friedland sensor bias
+  availability:
+    units: fraction
+    plain_language: fraction of real, non-imputed measurements
+telemetry_features:
+  rpm:
+    unit: RPM
+    subsystem: context
+  map_kPa:
+    unit: kPa
+    subsystem: context
+  Tm_K_k:
+    unit: K
+    subsystem: context
+  cht_degC:
+    unit: degC
+    subsystem: context
+  egt_degC:
+    unit: degC
+    subsystem: context
+  oil_press_kPa:
+    unit: kPa
+    subsystem: context
+  oil_temp_degC:
+    unit: degC
+    subsystem: context
+  fuel_flow_Lph:
+    unit: L/h
+    subsystem: context
+  ambient_temp_degC:
+    unit: degC
+    subsystem: context
+  ambient_press_kPa:
+    unit: kPa
+    subsystem: context
+  throttle_pct:
+    unit: percent
+    subsystem: context
+  injection_timing_degBTDC:
+    unit: degBTDC
+    subsystem: combustion
+  batt_volts:
+    unit: V
+    subsystem: electrical
+  alt_amps:
+    unit: A
+    subsystem: electrical
+  electrical_health_pct:
+    unit: percent
+    subsystem: electrical
+  vibration_rms_g:
+    unit: g RMS
+    subsystem: context
+  injection_duration_ms:
+    unit: ms
+    subsystem: combustion
+  fuel_pressure_kPa:
+    unit: kPa
+    subsystem: combustion
+  altitude_m:
+    unit: m
+    subsystem: context
+  air_density_ratio:
+    unit: ratio
+    subsystem: context

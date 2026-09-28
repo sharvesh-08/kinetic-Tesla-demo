@@ -1,0 +1,62 @@
+schema_version: 1
+provenance: synthetic_fleet_fit
+validated_for_decisions: false
+particles: 512
+seed: 42
+failure_state: 1.0
+short_likelihood_weight: 0.5
+long_min_history_seconds: 30
+long_update_spacing_seconds: 60
+long_observation_sigma: 0.05
+short_observation_sigma: 0.08
+long_rate_observation_sigma_per_hour: 0.03
+initial_degradation_mean: 0.05
+initial_degradation_sigma: 0.05
+anomaly_rate_log_sigma_per_window: 0.08
+anomaly_process_noise_multiplier: 3.0
+anomaly_decay_windows: 6
+subsystems:
+  lubrication:
+    channels:
+      oil_press_kPa: 50.0
+      oil_temp_degC: 20.0
+    prior_rate_median_per_hour: 0.035466952012660896
+    prior_rate_log_sigma: 0.7596301102359784
+    prior_onset_min_hours: 0.11433054581496616
+    prior_onset_max_hours: 1.9950752129902205
+  mechanical:
+    channels:
+      vibration_rms_g: 0.5
+    prior_rate_median_per_hour: 0.03513969309877121
+    prior_rate_log_sigma: 0.7794203040007461
+    prior_onset_min_hours: 0.0070913781755646
+    prior_onset_max_hours: 1.9622993743965202
+  electrical:
+    channels:
+      batt_volts: 1.0
+      alt_amps: 5.0
+    prior_rate_median_per_hour: 0.03631154407825217
+    prior_rate_log_sigma: 0.7885322112122094
+    prior_onset_min_hours: 0.020302228877354223
+    prior_onset_max_hours: 1.9878362454204404
+  combustion:
+    channels:
+      egt_degC: 60.0
+    prior_rate_median_per_hour: 0.04013433362789663
+    prior_rate_log_sigma: 0.7999842567663051
+    prior_onset_min_hours: 0.08046334628923235
+    prior_onset_max_hours: 1.9853840872537951
+  thermal:
+    channels:
+      cht_degC: 30.0
+    prior_rate_median_per_hour: 0.03746453838091638
+    prior_rate_log_sigma: 0.6799060282544505
+    prior_onset_min_hours: 0.015374171799765746
+    prior_onset_max_hours: 1.9280523662440574
+source_sha256: 900a2b36f32f7f348d3343068bcceace2659199a69cf4ee74749818c72a3286f
+source_flights_by_subsystem:
+  lubrication: 50
+  mechanical: 50
+  electrical: 50
+  combustion: 50
+  thermal: 49

@@ -1,0 +1,42 @@
+{
+  "rpm": [
+    0.0,
+    6000.0
+  ],
+  "throttle_pct": [
+    0.0,
+    100.0
+  ],
+  "ambient_temp_K": [
+    210.0,
+    330.0
+  ],
+  "ambient_press_Pa": [
+    15000.0,
+    110000.0
+  ],
+  "Pm_Pa": [
+    15000.0,
+    110000.0
+  ],
+  "air_mass_flow_kg_s": [
+    0.0,
+    0.20000000298023224
+  ],
+  "fuel_mass_flow_kg_s": [
+    0.0,
+    0.019999999552965164
+  ],
+  "injection_timing_degBTDC": [
+    0.0,
+    50.0
+  ],
+  "mixture_afr": [
+    8.0,
+    22.0
+  ],
+  "cowl_flap_pos": [
+    0.0,
+    1.0
+  ]
+}

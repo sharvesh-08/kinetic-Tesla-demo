@@ -1,0 +1,21 @@
+{
+  "schema_version": "layer5-engine-telemetry-v4",
+  "feature_count": 690,
+  "feature_schema_hash": "bf1757d49a3af0ae9a4ec768547459d8cb14347b2a1eae20ffa305ce2fccfc53",
+  "training_rows": 162,
+  "holdout_rows": 54,
+  "nominal_candidates": 18,
+  "class_counts": {
+    "nominal": 18,
+    "misfire": 18,
+    "injector_abnormality": 18,
+    "cooling_degradation": 18,
+    "lubrication_issue": 18,
+    "sensor_drift_failure": 18,
+    "combustion_instability": 18,
+    "overheating_trend": 18,
+    "abnormal_vibration": 18
+  },
+  "provenance": "simulator-derived, synthetic fault adjustments, not flight validated",
+  "splits": "last independent sortie of each class held out; training tool separates calibration by sortie"
+}

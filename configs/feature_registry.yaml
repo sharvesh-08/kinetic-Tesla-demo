@@ -1,0 +1,29 @@
+# Stable, field-named Layer 5 -> Layer 6 interface.
+schema_version: 3
+feature_schema_version: "layer5-fixed-5s-60s-v3"
+sample_rate_hz: 100
+window_seconds: 5
+hop_fraction: 0.5
+downsample_stride: 10
+long_window_seconds: 60
+long_channels: [oil_press_kPa, oil_temp_degC, cht_degC, egt_degC, batt_volts, alt_amps]
+long_summaries: [mean, slope, nis_mean, bias_mean, availability]
+regime_features: [rpm_mean_5s, throttle_mean_5s, rpm_slope_5s, altitude_mean_5s]
+channels:
+  egt_degC: {subsystem: combustion, units: degC}
+  cht_degC: {subsystem: thermal, units: degC}
+  map_kPa: {subsystem: air_path, units: kPa}
+  fuel_flow_Lph: {subsystem: air_path, units: L/h}
+  oil_press_kPa: {subsystem: lubrication, units: kPa}
+  oil_temp_degC: {subsystem: lubrication, units: degC}
+  vibration_rms_g: {subsystem: vibration, units: g}
+  batt_volts: {subsystem: electrical, units: V}
+  alt_amps: {subsystem: electrical, units: A}
+summaries:
+  mean: {units: channel, plain_language: "mean imputed residual"}
+  max_abs: {units: channel, plain_language: "maximum absolute imputed residual"}
+  slope: {units: channel_per_s, plain_language: "least-squares residual slope"}
+  nis_mean: {units: sigma_squared, plain_language: "mean normalized innovation squared"}
+  nis_max: {units: sigma_squared, plain_language: "maximum normalized innovation squared"}
+  bias_mean: {units: channel, plain_language: "mean estimated Friedland sensor bias"}
+  availability: {units: fraction, plain_language: "fraction of real, non-imputed measurements"}

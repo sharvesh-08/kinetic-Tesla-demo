@@ -1,0 +1,22 @@
+# Python cache & virtual environment
+.env
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+env/
+venv/
+
+# Redis dumps & database files
+dump.rdb
+*.rdb
+
+# Node dependencies
+node_modules/
+
+# IDE / OS settings
+.vscode/
+.idea/
+.DS_Store
+*.swp
+*.swo

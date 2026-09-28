@@ -1,0 +1,7 @@
+schema_version: 3
+feature_schema_version: "layer5-fixed-5s-60s-v3"
+master_rate_hz: 100
+window_seconds: 5
+overlap: 0.5
+downsample_stride: 10
+long_window_seconds: 60
